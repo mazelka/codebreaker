@@ -67,7 +67,7 @@ class Interface
   end
 
   def show_game_won_message
-    puts 'Congradulations! you won!'
+    puts 'Congratulations! you won!'
   end
 
   def prompt_to_start_again
