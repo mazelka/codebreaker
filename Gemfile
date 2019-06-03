@@ -5,3 +5,4 @@ gemspec
 gem 'rspec'
 gem 'simplecov', require: false, group: :test
 gem 'terminal-table'
+gem 'pry'

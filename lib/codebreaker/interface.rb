@@ -1,12 +1,13 @@
 require_relative '../helpers/iohelper'
 require_relative '../helpers/statistic'
 require_relative 'game'
-require_relative 'user'
+require_relative '../helpers/user'
 require_relative 'game_statistic'
 
 class Interface
   include IOHelper
   include Statistic
+  include User
 
   attr_accessor :statistic, :game, :stats, :user
 
@@ -23,7 +24,7 @@ class Interface
       when 'stats'
         show_stats
       when 'start'
-        begin_game
+        start_game_process
         break
       when 'exit'
         puts 'goodbye!'
@@ -35,17 +36,18 @@ class Interface
     end
   end
 
-  def begin_game
+  def start_game_process
     @game = Game.new
-    @game.start
-    @game.setup_game_settings
-    @game.get_user_guess
+    name = set_name
+    difficulty = select_difficulty
+    @game.start(name, difficulty)
+    p @game
+    get_user_guess
     game_win if @game.won
     game_over if @game.stats.all_attempts_used?
   end
 
   def game_over
-    @game.stats.attempts_used = 0
     show_game_over_message
     prompt_to_start_again
   end
@@ -73,5 +75,55 @@ class Interface
   def prompt_to_start_again
     puts "Try again? Enter 'start'"
     process_user_input
+  end
+
+  def select_difficulty
+    show_hints_help
+    while (input = gets.chomp)
+      case input.downcase
+      when 'simple'
+        puts 'Simple level is selected'
+        break
+      when 'middle'
+        puts 'Middle level is selected'
+        break
+      when 'hard'
+        puts 'Hard level is selected'
+        break
+      else
+        puts 'This is not valid option :('
+        show_hints_help
+      end
+    end
+    input.downcase
+  end
+
+  def get_user_guess
+    until @game.stats.all_attempts_used?
+      puts 'Enter your guess:'
+      input = gets.chomp
+      case input
+      when 'exit'
+        break puts 'Goodbye!'
+      when 'hint'
+        p @game.show_response_for_hint
+      else
+        process_game_input(input)
+        break if @game.won
+      end
+    end
+  end
+
+  def process_game_input(input)
+    if valid_guess?(input)
+      input_in_array = input.split('').map(&:to_i)
+      @game.submit_guess(input_in_array)
+    else
+      puts 'This in not valid input, try again!'
+    end
+  end
+
+  def valid_guess?(guess)
+    guess == guess.gsub(/[a-zA-Z]/, '') && guess.size == 4
   end
 end

@@ -1,29 +1,9 @@
 ---
 - !ruby/object:GameStatistic
-  name: masha
-  attempts_used: 1
+  name: Statistic
+  attempts_used: 0
   hints_used: 0
-  hints_total: 1
+  date: 2019-06-03 16:51
   difficulty: 3
   attempts_total: 5
-- !ruby/object:GameStatistic
-  name: kasha
-  attempts_used: 3
-  hints_used: 0
   hints_total: 1
-  difficulty: 3
-  attempts_total: 5
-- !ruby/object:GameStatistic
-  name: jeka
-  attempts_used: 2
-  hints_used: 1
-  hints_total: 1
-  difficulty: 2
-  attempts_total: 10
-- !ruby/object:GameStatistic
-  name: dashka
-  attempts_used: 5
-  hints_used: 1
-  hints_total: 1
-  difficulty: 3
-  attempts_total: 5

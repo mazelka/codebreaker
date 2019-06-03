@@ -4,51 +4,39 @@ require_relative 'game_statistic'
 
 class Game
   include IOHelper
-  attr_accessor :secret_code, :user, :stats, :won
+  attr_accessor :stats, :won
 
-  def start
-    @user = User.new
-    @stats = GameStatistic.new
+  def start(name, difficulty)
+    @stats = GameStatistic.new(name, difficulty)
     @won = false
     @secret_code = generate_secret_code
     create_hints
   end
 
-  def setup_game_settings
-    register_user
-    select_difficulty
-  end
-
-  def get_user_guess
-    until @stats.all_attempts_used?
-      puts 'Enter your guess:'
-      input = gets.chomp
-      case input
-      when 'exit'
-        break puts 'Goodbye!'
-      when 'hint'
-        show_response_for_hint
-      else
-        process_game_input(input)
-        break if @won
-      end
-    end
-  end
-
   def break_code(guess)
     if code_is_broken?(guess)
       @won = true
-      p '++++'
+      '++++'
     else
       code_copy = @secret_code.dup
       check_strict_match(guess, code_copy)
       check_existing_match(guess, code_copy)
-      print_compared_result(guess)
+      compared_result(guess).join.rstrip
     end
   end
 
-  def print_compared_result(guess)
-    p guess.select { |x| ['+', '-'].include?(x) }.sort.join
+  def submit_guess(guess)
+    @stats.increment_attempts_used
+    break_code(guess)
+  end
+
+  def compared_result(guess)
+    result = guess.select { |x| ['+', '-'].include?(x) }.sort
+    fill_with_spaces(result)
+  end
+
+  def fill_with_spaces(result)
+    (result + Array.new(4, ' ')).slice(0, 4)
   end
 
   def check_strict_match(guess, code)
@@ -71,51 +59,13 @@ class Game
     end
   end
 
-  def process_game_input(input)
-    if valid_guess?(input)
-      @stats.increment_attempts_used
-      input_in_array = input.split('').map(&:to_i)
-      break_code(input_in_array)
-    else
-      puts 'This in not valid input, try again!'
-    end
-  end
-
   def code_is_broken?(guess)
     guess == @secret_code
   end
 
-  def register_user
-    @user.set_name
-    @stats.name = @user.name
-  end
-
-  def select_difficulty
-    show_hints_help
-    while (input = gets.chomp)
-      case input
-      when '1'
-        @stats.set_easy_difficulty
-        puts 'Easy level is selected'
-        break
-      when '2'
-        @stats.set_medium_difficulty
-        puts 'Medium level is selected'
-        break
-      when '3'
-        @stats.set_hell_difficulty
-        puts 'HELL level is selected'
-        break
-      else
-        puts 'This is not valid option :('
-        show_hints_help
-      end
-    end
-  end
-
   def show_hint
     hint = generate_hint
-    puts "Your hint: #{hint}."
+    "Your hint: #{hint}."
   end
 
   def show_response_for_hint
@@ -132,10 +82,6 @@ class Game
     @available_hints.delete_at(index)
     @stats.increment_hints_used
     hint
-  end
-
-  def valid_guess?(guess)
-    guess == guess.gsub(/[a-zA-Z]/, '') && guess.size == 4
   end
 
   def create_hints

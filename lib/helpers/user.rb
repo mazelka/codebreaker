@@ -1,14 +1,13 @@
-class User
-  attr_accessor :name
-
+module User
   def set_name
     user_name = ask_user_name
     until name_valid?(user_name)
       puts 'Name is not valid, try again:'
       user_name = ask_user_name
     end
-    @name = user_name
+    name = user_name
     puts "Nice to meet you #{user_name}!"
+    name
   end
 
   def ask_user_name
