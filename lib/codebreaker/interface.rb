@@ -41,7 +41,6 @@ class Interface
     name = set_name
     difficulty = select_difficulty
     @game.start(name, difficulty)
-    p @game
     get_user_guess
     game_win if @game.won
     game_over if @game.stats.all_attempts_used?
