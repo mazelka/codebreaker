@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'bundler/setup'
-require 'codebreaker'
-p 'something'
+require_relative '../lib/codebreaker/interface'
 
 app = Interface.new
 app.process_user_input

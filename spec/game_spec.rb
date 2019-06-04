@@ -75,10 +75,6 @@ RSpec.describe Game do
       game.start('Test2', 'simple')
     end
 
-    it 'shows warning message for hints' do
-      expect { game.show_all_hints_used_message }.to output(/All hints used/).to_stdout
-    end
-
     it 'generates hint' do
       code = game.instance_variable_get(:@secret_code)
       expect(code.include?(game.generate_hint)).to be true
@@ -98,9 +94,9 @@ RSpec.describe Game do
       expect(game.stats.attempts_used).to eq(start_attempts_used + 1)
     end
 
-    it 'increments hints used after showed hint ' do
+    it 'increments hints used after generating hint ' do
       start_hints_used = game.stats.hints_used
-      game.show_hint
+      game.generate_hint
       expect(game.stats.hints_used).to eq(start_hints_used + 1)
     end
   end

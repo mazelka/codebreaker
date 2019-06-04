@@ -63,19 +63,6 @@ class Game
     guess == @secret_code
   end
 
-  def show_hint
-    hint = generate_hint
-    "Your hint: #{hint}."
-  end
-
-  def show_response_for_hint
-    @stats.all_hints_used? ? show_all_hints_used_message : show_hint
-  end
-
-  def show_all_hints_used_message
-    puts 'All hints used ;(  try to guess!'
-  end
-
   def generate_hint
     hint = @available_hints.sample
     index = @available_hints.index(hint)

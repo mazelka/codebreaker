@@ -105,9 +105,9 @@ class Interface
       when 'exit'
         break puts 'Goodbye!'
       when 'hint'
-        p @game.show_response_for_hint
+        @game.stats.all_hints_used? ? show_all_hints_used_message : show_hint
       else
-        process_game_input(input)
+        p process_game_input(input)
         break if @game.won
       end
     end
@@ -120,6 +120,15 @@ class Interface
     else
       puts 'This in not valid input, try again!'
     end
+  end
+
+  def show_hint
+    hint = @game.generate_hint
+    puts "Your hint: #{hint}"
+  end
+
+  def show_all_hints_used_message
+    puts 'All hints used ;(  try to guess!'
   end
 
   def valid_guess?(guess)

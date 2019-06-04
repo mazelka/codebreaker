@@ -92,6 +92,10 @@ RSpec.describe Interface do
       allow(interface).to receive(:gets).and_return('hint', 'exit')
       expect { interface.get_user_guess }.to output(/Your hint:/).to_stdout
     end
+
+    it 'shows warning message for hints' do
+      expect { interface.show_all_hints_used_message }.to output(/All hints used/).to_stdout
+    end
   end
 
   context 'user name' do
