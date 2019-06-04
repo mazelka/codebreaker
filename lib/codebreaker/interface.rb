@@ -118,7 +118,7 @@ class Interface
       input_in_array = input.split('').map(&:to_i)
       @game.submit_guess(input_in_array)
     else
-      puts 'This in not valid input, try again!'
+      'This in not valid input, try again!'
     end
   end
 
