@@ -1,0 +1,9 @@
+---
+- !ruby/object:GameStatistic
+  name: Statistic
+  attempts_used: 0
+  hints_used: 0
+  date: 2019-06-03 16:51
+  difficulty: 3
+  attempts_total: 5
+  hints_total: 1
